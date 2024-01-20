@@ -1,0 +1,55 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0400
+header_name {.h}
+code_name {.cxx}
+class UserInterface {open
+} {
+  Function {make_window()} {open
+  } {
+    Fl_Window window {
+      label {Load Audio(s)} open
+      xywh {353 207 400 154} type Double modal visible
+    } {
+      Fl_File_Input input_file {
+        label {Audio: }
+        xywh {60 12 265 30}
+      }
+      Fl_Button btn_select {
+        label Select
+        xywh {330 13 60 28}
+      }
+      Fl_Value_Input input_duration {
+        label {Set Silence Duration: }
+        xywh {152 50 50 25} minimum 200 maximum 100000 value 200
+      }
+      Fl_Button btn_detect {
+        label Detect
+        xywh {210 50 60 25}
+      }
+      Fl_Box {} {
+        label {Pieces:}
+        xywh {277 50 55 25} align 20
+      }
+      Fl_Box box_count {
+        label 0
+        xywh {336 50 50 25} align 20
+      }
+      Fl_Check_Button check_cut {
+        label {Enanle Audio Cut}
+        xywh {12 84 138 25} down_box DOWN_BOX
+      }
+      Fl_Button btn_confirm {
+        label Confirm
+        xywh {13 116 80 25}
+      }
+      Fl_Button btn_cancel {
+        label Cancel
+        xywh {100 116 80 25}
+      }
+      Fl_Value_Input {} {
+        label {Insert after row: } selected
+        xywh {258 84 39 24} maximum 10000
+      }
+    }
+  }
+}

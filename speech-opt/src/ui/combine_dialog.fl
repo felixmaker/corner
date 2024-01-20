@@ -1,0 +1,53 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0400
+header_name {.h}
+code_name {.cxx}
+class UserInterface {open
+} {
+  Function {make_window()} {open
+  } {
+    Fl_Window window {
+      label {Combine Option} open
+      xywh {321 173 300 160} type Double hide modal
+    } {
+      Fl_Box {} {
+        label {Select to apply subtitle or audio:}
+        xywh {23 13 225 25} align 20
+      }
+      Fl_Choice choice_start {
+        label {Start Time:} open
+        xywh {105 48 140 25} down_box BORDER_BOX
+      } {
+        MenuItem {} {
+          label Subtitle
+          xywh {25 25 30 20}
+        }
+        MenuItem {} {
+          label Audio
+          xywh {25 25 30 20}
+        }
+      }
+      Fl_Choice choice_duration {
+        label {Duration: } open selected
+        xywh {105 83 140 25} down_box BORDER_BOX
+      } {
+        MenuItem {} {
+          label Subtitle
+          xywh {35 35 30 20}
+        }
+        MenuItem {} {
+          label Audio
+          xywh {35 35 30 20}
+        }
+      }
+      Fl_Button btn_confirm {
+        label Confirm
+        xywh {25 119 75 25}
+      }
+      Fl_Button btn_cancel {
+        label Cancel
+        xywh {110 119 75 25}
+      }
+    }
+  }
+}

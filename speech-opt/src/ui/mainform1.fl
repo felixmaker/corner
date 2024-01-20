@@ -1,0 +1,80 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0400
+header_name {.h}
+code_name {.cxx}
+class UserInterface {open
+} {
+  Function {make_window()} {open
+  } {
+    Fl_Window {} {
+      label {Speech Opt} open
+      xywh {319 168 600 400} type Double resizable visible
+    } {
+      Fl_Flex {} {open
+        xywh {0 0 600 400} set_size_tuples {1  0 25 }
+      } {
+        Fl_Menu_Bar manu_bar {open
+          xywh {0 0 600 25}
+        } {
+          Submenu {} {
+            label File
+            xywh {10 10 60 20}
+          } {
+            MenuItem {} {
+              label {Load Subtitle(s)}
+              xywh {15 15 30 20}
+            }
+            MenuItem {} {
+              label {Load Audio(s)}
+              xywh {10 10 30 20}
+            }
+            MenuItem {} {
+              label Exit
+              xywh {10 10 30 20}
+            }
+          }
+          Submenu {} {
+            label Option open
+            xywh {10 10 60 20}
+          } {
+            MenuItem {} {
+              label {Set Table Size}
+              xywh {0 0 30 20}
+            }
+          }
+        }
+        Fl_Flex {} {open
+          xywh {0 25 600 375} type HORIZONTAL margins {5 5 5 5} gap 5 set_size_tuples {1  0 195 }
+        } {
+          Fl_Group group_left {open selected
+            xywh {5 30 195 365}
+          } {
+            Fl_Output output_index {
+              label {Index:}
+              xywh {10 50 180 25} align 5
+            }
+            Fl_Input input_start {
+              label {Start Time:}
+              xywh {10 95 180 25} align 5
+            }
+            Fl_Text_Editor input_text {
+              label {Text:}
+              xywh {10 145 180 170} align 5
+            }
+            Fl_Button btn_select {
+              label {Select Audio}
+              xywh {10 325 180 25}
+            }
+            Fl_Button btn_insert {
+              label Insert
+              xywh {10 355 180 25}
+            }
+          }
+          Fl_Group table_parent {open
+            xywh {205 30 390 365}
+          } {}
+        }
+      }
+    }
+  }
+}

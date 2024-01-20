@@ -1,0 +1,78 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0400
+header_name {.h}
+code_name {.cxx}
+class UserInterface {open
+} {
+  Function {make_window()} {open
+  } {
+    Fl_Window window {
+      label {Speech Opt} open
+      xywh {321 168 570 440} type Double resizable visible
+    } {
+      Fl_Flex {} {open
+        xywh {0 0 570 440} margins {10 10 10 10} gap 5 set_size_tuples {4  0 25  2 30  3 25  4 25 }
+      } {
+        Fl_Flex {} {open
+          xywh {10 10 550 25} type HORIZONTAL gap 5 set_size_tuples {4  0 60  1 105  2 105  3 125 }
+        } {
+          Fl_Box {} {
+            label {Subtitle:}
+            xywh {10 10 60 25} align 20
+          }
+          Fl_Button btn_load_subtitle {
+            label {Load subtitle}
+            xywh {75 10 105 25}
+          }
+          Fl_Button btn_add_row {
+            label {Set row length}
+            xywh {185 10 105 25}
+          }
+          Fl_Button btn_copy {
+            label {Copy subtitle text} selected
+            xywh {295 10 125 25}
+          }
+        }
+        Fl_Group table_parent {
+          xywh {10 40 550 295}
+        } {}
+        Fl_Flex {} {
+          xywh {10 340 550 30} type HORIZONTAL margins {50 0 0 0} gap 5 set_size_tuples {1  1 75 }
+        } {
+          Fl_File_Input input_file {
+            label {Audio: }
+            xywh {60 340 420 30}
+          }
+          Fl_Button btn_load_audio {
+            label Select
+            xywh {485 340 75 30}
+          }
+        }
+        Fl_Flex {} {open
+          xywh {10 375 550 25} type HORIZONTAL margins {150 0 0 0} gap 5 set_size_tuples {3  0 50  1 75  2 60 }
+        } {
+          Fl_Value_Input input_duration {
+            label {Set silence duration: }
+            xywh {160 375 50 25} minimum 200 maximum 100000 value 280
+          }
+          Fl_Button btn_detect {
+            label Detect
+            xywh {215 375 75 25}
+          }
+          Fl_Box {} {
+            label {Pieces:}
+            xywh {295 375 60 25} align 20
+          }
+          Fl_Box box_count {
+            label 0
+            xywh {360 375 200 25} align 20
+          }
+        }
+        Fl_Button btn_combine {
+          label {Combine audio && subtitle}
+          xywh {10 405 550 25}
+        }
+      }
+    }
+  }
+}
