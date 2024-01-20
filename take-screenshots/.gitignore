@@ -1,0 +1,5 @@
+/target
+/*.7z
+/*.zip
+/*.sha256sum
+/*.tar.gz
