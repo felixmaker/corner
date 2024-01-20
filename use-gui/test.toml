@@ -1,0 +1,5 @@
+command = "shutdown -s -t {shutdown-time}"
+
+[shutdown-time]
+type = "integer"
+description = "Shutdown Windows at (seconds): "

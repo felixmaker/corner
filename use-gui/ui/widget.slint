@@ -1,0 +1,130 @@
+import { VerticalBox , Button, LineEdit, HorizontalBox, SpinBox, ComboBox, CheckBox, Slider, Switch, TextEdit} from "std-widgets.slint";
+
+export struct InputMenifest {
+    id: string,
+    description: string,
+    default-value: string,
+    default-checked: bool,
+    render: string,
+    value: string,
+    type: string,
+    model: [string],
+    minimum: float,
+    maximum: float,
+}
+
+export component Widget inherits Rectangle {
+    in-out property <InputMenifest> manifest;
+
+    callback emit(string);
+    callback emit-bool(bool);
+
+    emit(value) => { manifest.value = value }    
+    emit-bool(checked) => { if (checked) { emit("true") } else { emit("false") }}
+}
+
+export component SimpleField inherits Rectangle {
+    in-out property <string> description;
+    VerticalLayout {
+        spacing: 5px;
+        Text { text: description; vertical-alignment: center; height: 20px; }
+        @children
+    }   
+}
+
+export component CheckBoxWidget inherits Widget {
+    CheckBox { text: root.manifest.description; checked: root.manifest.default-checked; toggled => {
+        root.emit-bool(self.checked)
+    }}
+}
+
+export component SwitchWidget inherits Widget {
+    Switch { text: root.manifest.description; checked: root.manifest.default-checked; toggled => {
+        root.emit-bool(self.checked)
+    }}
+}
+
+export component ComboBoxWidget inherits Widget {
+    SimpleField {
+        description: root.manifest.description;
+        ComboBox { model: root.manifest.model; current-value: root.manifest.default-value; height: 30px; selected(value) => {
+            root.emit(value)
+        }}
+    }
+}
+
+export component LineEditWidget inherits Widget {
+    SimpleField {
+        description: root.manifest.description;
+        LineEdit { height: 30px; text: root.manifest.default-value; edited(value) => { root.emit(value) }}
+    }
+}
+
+export component SliderWidget inherits Widget {
+    property <float> value: 0;
+
+    SimpleField {
+        description: root.manifest.description;
+        HorizontalLayout {
+            spacing: 5px;
+            Slider { minimum: root.manifest.minimum; maximum: root.manifest.maximum; height: 20px; value <=> value; changed(value) => {
+                root.emit(value)
+            }}
+            Text { text: value; vertical-alignment: center; width: 30px; height: 20px; }
+        }
+    }
+}
+
+export component SpinBoxWidget inherits Widget {
+    in property <int> minimum: 0;
+    in property <int> maximum: 100;
+    property <int> value: root.manifest.default-value.to-float();
+
+    SimpleField {
+        description: root.manifest.description;
+        SpinBox { minimum: root.manifest.minimum; maximum: root.manifest.maximum; value <=> value; height: 30px; edited(value) => {
+            root.emit(value)
+        }}
+    }  
+}
+
+
+export component TextEditWidget inherits Widget {
+    SimpleField {
+        description: root.manifest.description;
+        TextEdit { width: parent.width; height: 100px; edited(value) => { root.emit(value) }}
+    }
+}
+
+
+export component SimpleWidget inherits Rectangle {
+    in-out property <InputMenifest> manifest;
+    
+    if (manifest.render == "TextEdit"): TextEditWidget { manifest: manifest; }
+    if (manifest.render == "ComboBox"): CheckBoxWidget { manifest: manifest; }
+    if (manifest.render == "Slider"): SliderWidget { manifest: manifest; }
+    if (manifest.render == "SpinBox"): SpinBoxWidget { manifest: manifest; }
+    if (manifest.render == "CheckBox"): CheckBoxWidget { manifest: manifest; }
+    if (manifest.render == "Switch"): SwitchWidget { manifest: manifest; }
+    if (manifest.render != "TextEdit" && manifest.render != "ComboBox" && manifest.render != "Slider" &&
+    manifest.render != "SpinBox" && manifest.render != "CheckBox" && manifest.render != "Switch")
+     : LineEditWidget { manifest: manifest; }
+}
+
+
+export component SimpleWidgetGroup inherits Window {
+    in-out property <[InputMenifest]> list-of-manifest: [
+        { description: "Username: " },
+        { description: "Password: " },        
+        { description: "Age: ", render: "Slider" },
+        { description: "Male?", render: "ComboBox" },        
+        { description: "Comments: ", render: "TextEdit" },
+        { description: "Only me",  render: "Switch" },
+
+    ];
+    VerticalLayout {
+        padding: 5px;
+        spacing: 5px;
+        for manifest in list-of-manifest: SimpleWidget { manifest: manifest; vertical-stretch: 0; }
+    }
+}

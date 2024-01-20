@@ -1,0 +1,187 @@
+import { VerticalBox , Button, LineEdit, HorizontalBox, SpinBox, ComboBox, CheckBox, Slider, Switch, TextEdit} from "std-widgets.slint";
+
+export enum WidgetType { CheckBox }
+
+export struct Input {
+    id: string,
+    description: string,
+    value: string,
+    type: WidgetType,
+    model: [string]
+}
+
+export component Widget inherits VerticalBox {
+    padding: 0;
+    in property <string> description: "Input whatever your like?";
+    in property <string> id: "some-widget";
+    callback emit(string);
+}
+
+export component CheckBoxWidget inherits Widget {
+    CheckBox {
+        text: root.description;
+        toggled => {
+            if (self.checked) {
+                root.emit("true")
+            } else {
+                root.emit("false")
+            }
+        }
+    }
+}
+
+export component ComboBoxWidget inherits Widget {
+    in property <[string]> model;
+
+    Text {
+        text: root.description;
+        vertical-alignment: center;
+        height: 20px;
+    }
+    ComboBox { 
+        height: 30px;
+        model: model;
+        selected(value) => {
+            root.emit(value)
+        }
+    }
+}
+
+export component LineEditWidget inherits Widget {
+    Text {
+        text: root.description;
+        height: 20px;
+        vertical-alignment: center;
+    }
+    LineEdit {
+        height: 30px;
+        edited(value) => {
+            root.emit(value)
+        }
+    }
+}
+
+export component SliderWidget inherits Widget {
+    in property <float> minimum: 0;
+    in property <float> maximum: 100;
+    property <float> value: 0;
+    property <string> value-text: 0;
+    Text {
+        text: root.description;
+        height: 20px;
+        vertical-alignment: center;
+    }
+    HorizontalBox {
+        padding: 0;
+        
+        Slider {
+            minimum: minimum;
+            maximum: maximum;
+            value <=> value;
+            changed(value) => {
+                value-text = value;
+                root.emit(value)
+            }
+        }
+
+        Text {
+            width: 30px;
+            text <=> value-text;
+        }
+    }
+    
+}
+
+export component SpinBoxWidget inherits Widget {
+    in property <int> minimum: 0;
+    in property <int> maximum: 100;
+    property <int> value: 0;
+    Text {
+        text: root.description;
+        height: 20px;
+        vertical-alignment: center;
+    }
+    SpinBox {
+        minimum: minimum;
+        maximum: maximum;
+        value <=> value;
+        edited(value) => {
+            root.emit(value)
+        }
+    }
+}
+
+
+export component SwitchWidget inherits Widget {
+    Switch {
+        text: root.description;
+        toggled => {
+            if (self.checked) {
+                root.emit("true")
+            } else {
+                root.emit("false")
+            }
+        }
+    }
+}
+
+
+export component TextEditWidget inherits Widget {
+    Text {
+        text: root.description;
+        height: 20px;
+        vertical-alignment: center;
+    }
+    TextEdit {
+        width: parent.width;
+        height: 100px;
+        edited(value) => {
+            root.emit(value)
+        }
+    }
+}
+
+// export component IntegerField inherits Widget {
+//     property <brush> text-color: Colors.black;
+    
+//     Text { text: root.description; height: 20px; color <=> text-color; }
+//     LineEdit { height: 30px; edited(value) => { 
+//         if (value.is-float()) {
+//             text-color = Colors.black;
+//             root.set-value(round(value.to-float()))
+//         } else {
+//             text-color = Colors.red;
+//         }
+//     }}
+// }
+
+
+
+// export component MainWindow inherits Window {
+//     default-font-size: 14px;
+
+//     preferred-width: 300px;
+
+//     in-out property <[Input]> inputs: [
+//         { id: "shutdown-time", type: InputType.text, description: "Shutdown Windows at (seconds): ", value: ""},
+//     ];
+
+//     callback submit();
+
+//     VerticalBox {
+//         padding: 12px;
+
+//         for input[index] in inputs: Rectangle {            
+//             if input.type == InputType.text: TextField { description: input.description; set-value(value) => { input.value = value } }
+//             if input.type == InputType.integer: IntegerField { description: input.description; set-value(value) => { input.value = value } }
+//             if input.type == InputType.combo: ComboField { description: input.description; model: input.model; set-value(value) => { input.value = value } }
+//         }
+
+//         HorizontalBox {
+//             padding: 0;
+
+//             Button { text: "Ok"; primary: true; clicked => { submit() } height: 30px; }
+//             Button { text: "Quit"; height: 30px; }
+//         }
+//     }
+// }

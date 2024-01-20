@@ -1,0 +1,16 @@
+export struct KeyValuePair {
+    key: string,
+    value: string
+}
+
+export global KeyValuePairs {
+    in-out property <[KeyValuePair]> key-value-pairs;
+    in-out property <string> text;
+
+    callback add();
+    callback remove(int);
+    callback clear();
+    callback update();
+}
+
+

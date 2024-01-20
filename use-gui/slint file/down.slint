@@ -1,0 +1,35 @@
+import { VerticalBox , LineEdit, HorizontalBox, Button, TabWidget, TextEdit, ProgressIndicator, AboutSlint, StandardListView, ScrollView} from "std-widgets.slint";
+
+
+global Singal {
+    in property <string> answer;
+}
+
+export component HomePage inherits VerticalBox {
+    Text {
+        text: "How are you?";
+    }
+    LineEdit {
+        text <=> Singal.answer;
+    }
+}
+
+export component MainWindow inherits Window {
+    default-font-size: 14px;
+    width: 600px;
+    height: 400px;
+    
+    property <string> home_answer;
+
+    HorizontalBox {
+        menu := StandardListView { 
+            width: 150px;
+            model: [ { text: "Home"}, { text: "Setting" },
+            ];
+        }
+
+        if (menu.current-item == 0) : HomePage {}
+
+    }
+}
+

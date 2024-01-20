@@ -1,0 +1,59 @@
+import { HorizontalBox , SpinBox, VerticalBox, Button} from "std-widgets.slint";
+export component MainWindow inherits Window {
+    default-font-size: 14px;
+    max-width: 400px;
+    max-height: 300px;
+    VerticalBox {
+        HorizontalBox {
+            padding: 0;
+            height: 58px;
+
+            VerticalBox { 
+                Text {
+                    text: "Hours";
+                }
+                h := SpinBox { 
+                    maximum: 24;
+                }
+            }
+            VerticalBox { 
+                Text {
+                    text: "Minutes";
+                }
+                m := SpinBox { 
+                    maximum: 60;
+    
+                    edited(v) => {
+                        if (v == 60) {
+                            h.value += 1;
+                            self.value = 0;
+                        }
+                    }
+                }
+            }
+            VerticalBox { 
+                Text {
+                    text: "Seconds";
+                }
+                s := SpinBox { 
+                    maximum: 60;
+    
+                    edited(v) => {
+                        if (v == 60) {
+                            m.value += 1;
+                            self.value = 0;
+                        }
+                    }
+                }
+            }
+        }
+        HorizontalBox {
+            spacing: 25px;
+
+            for button[index] in [ "Confirm", "Reset", "Cancel" ]: Button {
+                text: button;
+            }
+        }
+    }
+    
+}

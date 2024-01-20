@@ -1,0 +1,42 @@
+import { VerticalBox , LineEdit, Button, HorizontalBox} from "std-widgets.slint";
+
+export enum InputType { text, integer }
+
+export struct Input {
+    id: string,
+    type: InputType,    
+    description: string,
+    value: string
+}
+
+
+export component MainWindow inherits Window {
+    preferred-width: 300px;
+    preferred-height: 400px;
+
+    default-font-size: 14px;
+
+    in-out property <[Input]> inputs: [
+        { id: "shutdown-time", type: InputType.text, description: "Shutdown Windows at (seconds): ", value: ""},
+    ];
+
+    in-out property <string> output;
+
+    VerticalBox {
+        padding: 5px;
+
+        for input[index] in inputs: Rectangle {
+            if input.type == InputType.text: VerticalBox {
+                Text { text: input.description; height: 20px; }
+                LineEdit { height: 30px; edited(value) => { input.value = value } }
+            }
+        }
+
+        LineEdit { height: 30px; text <=> output; }
+
+        HorizontalBox { 
+            Button { text: "Ok!"; primary: true; clicked => { debug(inputs) } }
+            Button { text: "Quit!"; }
+        }
+    }
+}

@@ -1,0 +1,25 @@
+import { HorizontalBox , VerticalBox, LineEdit, SpinBox} from "std-widgets.slint";
+
+enum InputType { text, number }
+
+export struct Input  {
+    type: InputType,
+}
+
+export component MainWindow inherits Window {
+    default-font-size: 14px;
+    width: 600px;
+    height: 400px;
+
+    in-out property<[Input]> list-of-input: [
+        {type: InputType.text},
+        {type: InputType.number}
+    ];
+
+    VerticalBox {
+        for input[index] in root.list-of-input: Rectangle {
+            if input.type == InputType.text: LineEdit {  }
+            if input.type == InputType.number: SpinBox {  }
+        }
+    }
+}

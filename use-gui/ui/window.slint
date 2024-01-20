@@ -1,0 +1,30 @@
+import { LineEdit, TextEdit, ComboBox, Button, ScrollView, StandardListView} from "std-widgets.slint";
+import { WidgetPanel, KeyValueInput, WidgetManifestSingleton} from "editor.slint";
+import { KeyValuePairs } from "signal.slint";
+
+export component MainWindow inherits Window {
+    min-width: 800px;
+    default-font-size: 14px;
+
+    VerticalLayout {
+        padding: 5px;
+        spacing: 5px;
+        Text { text: "Input the command:"; vertical-alignment: center; height: 30px; }
+        edit:= TextEdit { height: 80px; }
+        HorizontalLayout {
+            spacing: 5px;
+            Button { text: "Generate from selected token"; height: 30px; clicked => {
+                edit.cut();
+                WidgetManifestSingleton.push-from-clipboard();
+            }}
+            Button { text: "Generate All"; height: 30px; clicked => {}}
+        }
+        WidgetPanel { }
+        HorizontalLayout {
+            spacing: 5px;
+            Button { text: "Save manifest"; height: 30px; }
+            Button { text: "Test manifest"; height: 30px; }
+            Button { text: "Exit"; height: 30px; }
+        }
+    }    
+}

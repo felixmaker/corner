@@ -1,0 +1,47 @@
+import { VerticalBox , AboutSlint, Button, LineEdit , CheckBox, HorizontalBox, ComboBox} from "std-widgets.slint";
+    
+    export global Data {
+        in property <string> username;
+        in property <string> password;
+        callback login(string, string);
+    }
+    
+    export component MainWindow inherits Window {
+        default-font-size: 14px;
+        max-width: 400px;
+        max-height: 300px;
+        title: "DDTank Loginer";        
+
+        VerticalBox {
+            AboutSlint {
+                height: 100px;
+            }
+            LineEdit {
+                placeholder-text: @tr("Username");
+                text <=> Data.username;
+            }
+            LineEdit {
+                placeholder-text: @tr("Password");
+                input-type: password;
+                text <=> Data.password;
+            }
+            HorizontalBox {
+                padding: 0;
+
+                ComboBox { 
+                    model: ["7k7k"];
+                }
+
+                LineEdit {
+                    placeholder-text: @tr("Server ID");
+                }
+            }
+            Button { 
+                text: @tr("Submit");
+                height: 30px;
+                clicked => {
+                    Data.login(Data.username, Data.password);
+                }
+            }            
+        }
+    }

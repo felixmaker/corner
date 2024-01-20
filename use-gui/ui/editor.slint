@@ -1,0 +1,128 @@
+import { LineEdit, TextEdit, ComboBox, Button, ScrollView, StandardListView} from "std-widgets.slint";
+import { KeyValuePairs, KeyValuePair } from "signal.slint";
+
+export component KeyValueInput inherits Rectangle {
+    property <[KeyValuePair]> key-value-pairs: KeyValuePairs.key-value-pairs;
+
+    VerticalLayout {
+        spacing: 5px;
+        TextEdit { text: KeyValuePairs.text; height: 80px; }
+        Button { text: "Update"; height: 30px; clicked => { KeyValuePairs.update() }}
+        Button { text: "Add Key Value Pair"; height: 30px; clicked => { KeyValuePairs.add() }}
+        for pair[index] in KeyValuePairs.key-value-pairs: HorizontalLayout {
+            spacing: 5px;
+            LineEdit { placeholder-text: "Key"; text: pair.key; edited => { pair.key = self.text }}
+            Text { text: "=>"; vertical-alignment: center; height: 30px; }
+            LineEdit { placeholder-text: "Value"; text: pair.value; edited => { pair.value = self.text }}
+            Button { text: "Delete"; clicked => { KeyValuePairs.remove(index) }}
+        }
+    }
+}
+
+export struct WidgetMenifest {
+    uuid: string,
+    name: string,
+    description: string,
+    default-value: string,
+    render: string,
+    checker: string,
+    quotes-option: string,
+    minimum: string,
+    maximum: string,
+    reflection: string,
+}
+
+export global WidgetManifestSingleton {
+    in-out property <[string]> render-modal: ["LineEdit", "TextEdit", "ComboBox", "Slider", "SpinBox", "CheckBox", "Switch"];
+    in-out property <[string]> checker-modal: ["Text", "TextRange", "Boolean", "Number", "NumberRange"];
+    in-out property <[string]> quotes-option-modal: ["Force Quotes", "No Quotes", "Unset"];
+
+    in-out property <[WidgetMenifest]> list-of-widget-menifest;
+    in-out property <[StandardListViewItem]> list-of-widget-name;
+
+    callback push-from-clipboard();
+}
+
+export component WidgetEditor inherits Rectangle {
+    property <bool> number-range-enabled: false;
+    
+    in-out property <WidgetMenifest> manifest: {
+        render: WidgetManifestSingleton.render-modal[0],
+        checker: WidgetManifestSingleton.checker-modal[0],
+        quotes-option: WidgetManifestSingleton.quotes-option-modal[0]
+    };
+
+    callback render-selected(string);
+
+    render-selected(render) => {
+        if (render == "Slider" || render == "SpinBox") {
+            number-range-enabled = true;
+        } else {
+            number-range-enabled = false;
+        }
+    }
+
+    GridLayout {
+        padding: 5px;
+        spacing: 5px;
+        Row {            
+            Text { text: "Name"; vertical-alignment: center; height: 30px; }
+            GridLayout {
+                spacing: 5px;
+                LineEdit { placeholder-text: "ID"; accepted => { manifest.name = self.text }}
+                Button { text: "Random"; }
+            }
+        }
+        Row {
+            Text { text: "Description"; vertical-alignment: center; height: 30px; }
+            LineEdit { placeholder-text: "Description"; accepted => { manifest.description = self.text }}
+        }
+        Row {
+            Text { text: "Default value"; vertical-alignment: center; height: 30px; }
+            LineEdit { placeholder-text: "Value"; accepted => { manifest.default-value = self.text; }}
+        }
+        Row {
+            Text { text: "Render"; vertical-alignment: center; height: 30px; }
+            ComboBox { model: WidgetManifestSingleton.render-modal; selected(value) => { render-selected(value); manifest.render = value; }}
+        }
+        Row {
+            Text { text: "Checker"; vertical-alignment: center; height: 30px; }
+            ComboBox { model: WidgetManifestSingleton.checker-modal; selected(value) => { manifest.checker = value; }}
+        }
+        Row {
+            Text { text: "Quotes Option"; vertical-alignment: center; height: 30px; }
+            ComboBox { model: WidgetManifestSingleton.quotes-option-modal; selected(value) => { manifest.quotes-option = value; }}
+        }
+        Row {
+            Text { text: "Range(Number)"; vertical-alignment: center; height: 30px; }
+            GridLayout {
+                spacing: 5px;
+                LineEdit { placeholder-text: "Min"; enabled: number-range-enabled; accepted(value) => { manifest.minimum = value; }}
+                Text { text: "~"; vertical-alignment: center; }
+                LineEdit { placeholder-text: "Max"; enabled: number-range-enabled; accepted(value) => { manifest.maximum = value; } }
+            }
+        }
+        Row {
+            Text { text: "Reflect Value"; vertical-alignment: center; height: 30px; }
+            TextEdit { height: 80px; edited(value) => { manifest.reflection = value; }}
+        }
+    }
+}
+
+export component WidgetPanel inherits Rectangle {
+    // in-out property <[StandardListViewItem]> list-of-name;
+    // in-out property <[WidgetMenifest]> list-of-manifest;
+    HorizontalLayout {
+        VerticalLayout {
+            Text { text: "Name List"; vertical-alignment: center; height: 30px; font-weight: 600; width: 200px;}
+            if WidgetManifestSingleton.list-of-widget-menifest.length == 0: Text { text: "There is no menifest. You should generate it first!"; height: 60px; width: 200px; wrap: word-wrap;}
+            StandardListView { model: WidgetManifestSingleton.list-of-widget-name; current-item-changed(index) => {scroll.viewport-y = - 400px * index}}            
+        }
+        scroll := ScrollView {
+            height: 400px;
+            VerticalLayout {
+                for manifest[index] in WidgetManifestSingleton.list-of-widget-menifest: WidgetEditor { height: 400px; manifest: manifest;} 
+            }
+        }
+    }
+}

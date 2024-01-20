@@ -1,0 +1,83 @@
+import { HorizontalBox , SpinBox, VerticalBox, Button, Slider} from "std-widgets.slint";
+export component MainWindow inherits Window {
+    default-font-size: 14px;
+    min-width: 300px;
+    min-height: 200px;
+    max-height: 250px;
+    title: @tr("Shutdown Scheduler");
+
+    callback send-shutdown-signal(int);
+
+    in-out property <float> hours;
+    in-out property <float> minutes;
+    in-out property <float> seconds;
+
+    property <length> slider-width: 200px;
+    property <length> slider-height: 20px;
+    property <string> status: @tr("Stopped");
+
+    VerticalBox {
+        padding: 15px;
+        spacing: 10px;
+
+        Text {
+            height: 20px;
+            text: @tr("Send Shutdown signal in...");
+        }        
+
+        GridLayout {
+            spacing: 8px;
+
+            Row {
+                Text { text: @tr("Hours: ");}
+                Slider {
+                    maximum: 24;
+                    value <=> root.hours;
+                }
+                Text {
+                    width: 20px;
+                    height: 20px;
+                    text: Math.ceil(root.hours);
+                }
+            }
+
+            Row {
+                Text { text: @tr("Minutes: ");}
+                Slider {
+                    maximum: 24;
+                    value <=> root.minutes;
+                }
+                Text {
+                    width: 20px;
+                    height: 20px;
+                    text: Math.ceil(root.minutes);
+                }
+            }
+
+            Row {
+                Text { text: @tr("Seconds: ");}
+                Slider {
+                    maximum: 24;
+                    value <=> root.seconds;
+                }
+                Text {
+                    width: 20px;
+                    height: 20px;
+                    text: Math.ceil(root.seconds);
+                }
+            }
+        }
+
+        HorizontalBox {
+            padding: 0px;
+
+            Button { text: @tr("Commit"); height: 30px; }
+            Button { text: @tr("Reset"); height: 30px; }
+        }
+
+        Text {
+            text: @tr("Status: {}", root.status);
+        }
+    }
+    
+}
